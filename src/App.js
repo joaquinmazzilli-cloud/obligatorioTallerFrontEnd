@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter,Routes,Route } from "react-router-dom"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Home from "./pages/Home"
+import Login from "./pages/Login"
+import LocalDetail from "./pages/LocalDetail"
+import UserProfile from "./pages/UserProfile"
+import CreateLocal from "./pages/CreateLocal"
+import CreateDish from "./pages/CreateDish"
+
+function App(){
+
+return(
+
+<BrowserRouter>
+
+<Routes>
+
+<Route path="/" element={<Home/>}/>
+
+<Route path="/login" element={<Login/>}/>
+
+<Route path="/local/:id" element={<LocalDetail/>}/>
+
+<Route path="/user/:id" element={<UserProfile/>}/>
+
+<Route path="/crear-local" element={<CreateLocal/>}/>
+
+<Route path="/crear-plato" element={<CreateDish/>}/>
+
+</Routes>
+
+</BrowserRouter>
+
+)
+
 }
 
-export default App;
+export default App

@@ -1,0 +1,49 @@
+.card-local {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: white;
+}
+
+.card-local:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.card-local img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-info {
+  padding: 1rem;
+}
+
+.card-info h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.card-info p {
+  margin: 0.25rem 0;
+  color: #555;
+}
+
+.btn-ver-mas {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.btn-ver-mas:hover {
+  background-color: #2980b9;
+}
