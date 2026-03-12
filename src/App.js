@@ -7,6 +7,7 @@ import UserProfile from "./pages/UserProfile"
 import CreateLocal from "./pages/CreateLocal"
 import CreateDish from "./pages/CreateDish"
 
+
 function App(){
 
 return(
@@ -21,11 +22,10 @@ return(
 
 <Route path="/local/:id" element={<LocalDetail/>}/>
 
-<Route path="/user/:id" element={<UserProfile/>}/>
-
 <Route path="/crear-local" element={<CreateLocal/>}/>
 
 <Route path="/crear-plato" element={<CreateDish/>}/>
+<Route path="/user/:id" element={<UserProfile />} />
 
 </Routes>
 

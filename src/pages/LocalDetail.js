@@ -1,52 +1,62 @@
-import { useParams } from "react-router-dom"
 import { useEffect,useState } from "react"
+import { useParams, Link } from "react-router-dom"
 import { getLocalById } from "../services/api"
-import { Link } from "react-router-dom"
 
 function LocalDetail(){
 
-const {id} = useParams()
+const { id } = useParams()
 
 const [local,setLocal] = useState(null)
 
 useEffect(()=>{
-cargar()
-},[])
+cargarLocal()
+},[id])
 
-async function cargar(){
+async function cargarLocal(){
+
+try{
 
 const data = await getLocalById(id)
-setLocal(data)
+
+/* algunas APIs devuelven item */
+const localData = data.item ? data.item : data
+
+setLocal(localData)
+
+}catch(error){
+
+console.log(error)
 
 }
 
-if(!local) return <p>cargando...</p>
+}
+
+if(!local){
+return <p>Cargando local...</p>
+}
 
 return(
 
-<div>
+<div className="container">
 
-<h1>{local.name}</h1>
+<h1>{local.name || "Sin nombre"}</h1>
 
-<p>direccion: {local.address}</p>
-<p>ciudad: {local.city}</p>
-<p>zona: {local.zone}</p>
-<p>horario: {local.hours}</p>
+<p>Ciudad: {local.city || "No disponible"}</p>
 
-<p>precio: {local.priceRange}</p>
+<p>Tipo: {local.type || "No disponible"}</p>
 
-<p>rating: {local.ratingAverage}</p>
+<p>Precio: {local.priceRange || "No disponible"}</p>
 
-<p>descripcion: {local.description}</p>
+<p>Rating: {local.ratingAverage || "Sin rating"}</p>
 
-<img src={local.photos?.[0]} width="300"/>
-
+{local.creator && (
 <p>
-creado por: 
+Creado por: 
 <Link to={`/user/${local.creator.id}`}>
 {local.creator.name}
 </Link>
 </p>
+)}
 
 </div>
 

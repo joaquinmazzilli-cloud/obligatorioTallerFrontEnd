@@ -98,21 +98,47 @@ export async function postLocalReview(localId,review,token){
 
 }
 
-export async function postDishReview(dishId,review,token){
+/* CREAR LOCAL */
 
-  const res = await fetch(`${API}/dishes/${dishId}/reviews`,{
+export async function createLocal(local,token){
 
-    method:"POST",
+const res = await fetch(`${API}/locals`,{
 
-    headers:{
-      "Content-Type":"application/json",
-      "Authorization":`Bearer ${token}`
-    },
+method:"POST",
 
-    body: JSON.stringify(review)
+headers:{
+"Content-Type":"application/json",
+"Authorization":`Bearer ${token}`
+},
 
-  })
+body: JSON.stringify(local)
 
-  return res.json()
+})
+
+return res.json()
 
 }
+
+
+/* CREAR PLATO */
+
+export async function createDish(dish,token){
+
+const res = await fetch(`${API}/dishes`,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"Authorization":`Bearer ${token}`
+},
+
+body: JSON.stringify(dish)
+
+})
+
+return res.json()
+
+}
+  
+

@@ -8,7 +8,7 @@ function Home(){
 const [locales,setLocales] = useState([])
 const [platos,setPlatos] = useState([])
 
-/* filtros locales */
+/* FILTROS LOCALES */
 
 const [search,setSearch] = useState("")
 const [tipo,setTipo] = useState("")
@@ -16,7 +16,7 @@ const [precio,setPrecio] = useState("")
 const [ciudad,setCiudad] = useState("")
 const [rating,setRating] = useState("")
 
-/* filtros platos */
+/* FILTROS PLATOS */
 
 const [platoSearch,setPlatoSearch] = useState("")
 const [categoria,setCategoria] = useState("")
@@ -46,7 +46,7 @@ console.log(error)
 
 }
 
-/* filtro locales */
+/* FILTRO LOCALES */
 
 const localesFiltrados = locales.filter(local=>{
 
@@ -62,7 +62,7 @@ return(
 
 })
 
-/* filtro platos */
+/* FILTRO PLATOS */
 
 const platosFiltrados = platos.filter(plato=>{
 
@@ -80,7 +80,7 @@ return(
 
 return(
 
-<div>
+<div className="container">
 
 <h1>Rutas del Sabor</h1>
 
@@ -94,7 +94,7 @@ value={search}
 onChange={(e)=>setSearch(e.target.value)}
 />
 
-<select onChange={(e)=>setTipo(e.target.value)}>
+<select value={tipo} onChange={(e)=>setTipo(e.target.value)}>
 <option value="">tipo</option>
 <option value="RESTAURANTE">restaurante</option>
 <option value="CAFETERIA">cafeteria</option>
@@ -102,14 +102,14 @@ onChange={(e)=>setSearch(e.target.value)}
 <option value="FOOD_TRUCK">food truck</option>
 </select>
 
-<select onChange={(e)=>setPrecio(e.target.value)}>
+<select value={precio} onChange={(e)=>setPrecio(e.target.value)}>
 <option value="">precio</option>
 <option value="ECONOMICO">economico</option>
 <option value="MEDIO">medio</option>
 <option value="ALTO">alto</option>
 </select>
 
-<select onChange={(e)=>setRating(e.target.value)}>
+<select value={rating} onChange={(e)=>setRating(e.target.value)}>
 <option value="">puntuacion</option>
 <option value="1">1+</option>
 <option value="2">2+</option>
@@ -120,6 +120,7 @@ onChange={(e)=>setSearch(e.target.value)}
 
 <input
 placeholder="ciudad"
+value={ciudad}
 onChange={(e)=>setCiudad(e.target.value)}
 />
 
@@ -127,10 +128,11 @@ onChange={(e)=>setCiudad(e.target.value)}
 
 {localesFiltrados.map(local=>(
 
-<CardLocal
-key={local.id}
-local={local}
-/>
+<div className="card" key={local.id}>
+
+<CardLocal local={local}/>
+
+</div>
 
 ))}
 
@@ -138,10 +140,11 @@ local={local}
 
 <input
 placeholder="buscar plato"
+value={platoSearch}
 onChange={(e)=>setPlatoSearch(e.target.value)}
 />
 
-<select onChange={(e)=>setCategoria(e.target.value)}>
+<select value={categoria} onChange={(e)=>setCategoria(e.target.value)}>
 <option value="">categoria</option>
 <option value="ENTRADA">entrada</option>
 <option value="PRINCIPAL">principal</option>
@@ -152,16 +155,19 @@ onChange={(e)=>setPlatoSearch(e.target.value)}
 
 <input
 type="date"
+value={fecha}
 onChange={(e)=>setFecha(e.target.value)}
 />
 
 <input
 placeholder="ciudad"
+value={platoCiudad}
 onChange={(e)=>setPlatoCiudad(e.target.value)}
 />
 
 <input
 placeholder="local"
+value={platoLocal}
 onChange={(e)=>setPlatoLocal(e.target.value)}
 />
 
@@ -169,7 +175,7 @@ onChange={(e)=>setPlatoLocal(e.target.value)}
 
 {platosFiltrados.map(plato=>(
 
-<div key={plato.id} style={{border:"1px solid gray",margin:"10px",padding:"10px"}}>
+<div className="card" key={plato.id}>
 
 <h4>{plato.name}</h4>
 
