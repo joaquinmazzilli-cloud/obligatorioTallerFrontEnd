@@ -1,37 +1,32 @@
 const API = "https://api-react-taller-production.up.railway.app/api"
 
 
-export async function registerUser(username, name, password) {
+export async function loginUser(user,password){
 
-  const res = await fetch(`${API}/auth/register`,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body: JSON.stringify({
-      username,
-      name,
-      password
-    })
-  })
+const res = await fetch(`${API}/auth/login`,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body: JSON.stringify({user,password})
+})
 
-  return res.json()
+return res.json()
+
 }
 
-export async function loginUser(username,password){
+export async function registerUser(user,password){
 
-  const res = await fetch(`${API}/auth/login`,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body: JSON.stringify({
-      username,
-      password
-    })
-  })
+const res = await fetch(`${API}/auth/register`,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body: JSON.stringify({user,password})
+})
 
-  return res.json()
+return res.json()
+
 }
 
 

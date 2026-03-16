@@ -1,51 +1,94 @@
-import { useState } from "react";
-import { loginUser } from "../services/api";
+import { useState } from "react"
+import { loginUser, registerUser } from "../services/api"
+import { useNavigate } from "react-router-dom"
 
-function Login() {
+function Login(){
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
+const [user,setUser] = useState("")
+const [pass,setPass] = useState("")
 
-    e.preventDefault();
+async function handleLogin(e){
 
-    const data = await loginUser(username, password);
+e.preventDefault()
 
-    localStorage.setItem("user", JSON.stringify(data));
+try{
 
-    alert("Login correcto");
-  };
+const res = await loginUser(user,pass)
 
-  return (
-    <div>
+localStorage.setItem("user",JSON.stringify(res))
 
-      <h1>Login</h1>
+navigate(`/user/${res.user.id}`)
 
-      <form onSubmit={handleSubmit}>
+}catch(error){
 
-        <input
-          type="text"
-          placeholder="Usuario"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+console.log(error)
+alert("login incorrecto")
 
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button type="submit">
-          Login
-        </button>
-
-      </form>
-
-    </div>
-  );
 }
 
-export default Login;
+}
+
+async function handleRegister(){
+
+try{
+
+await registerUser(user,pass)
+
+/* login automático */
+const res = await loginUser(user,pass)
+
+localStorage.setItem("user",JSON.stringify(res))
+
+navigate(`/user/${res.user.id}`)
+
+}catch(error){
+
+console.log(error)
+alert("registro incorrecto")
+
+}
+
+}
+
+return(
+
+<div className="container">
+
+<h1>Login</h1>
+
+<form onSubmit={handleLogin}>
+
+<input
+placeholder="usuario"
+value={user}
+onChange={(e)=>setUser(e.target.value)}
+/>
+
+<input
+type="password"
+placeholder="password"
+value={pass}
+onChange={(e)=>setPass(e.target.value)}
+/>
+
+<button type="submit">
+Login
+</button>
+
+</form>
+
+<br/>
+
+<button onClick={handleRegister}>
+Registrarse
+</button>
+
+</div>
+
+)
+
+}
+
+export default Login

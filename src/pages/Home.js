@@ -8,7 +8,6 @@ function Home(){
 const [locales,setLocales] = useState([])
 const [platos,setPlatos] = useState([])
 
-/* FILTROS LOCALES */
 
 const [search,setSearch] = useState("")
 const [tipo,setTipo] = useState("")
@@ -16,7 +15,7 @@ const [precio,setPrecio] = useState("")
 const [ciudad,setCiudad] = useState("")
 const [rating,setRating] = useState("")
 
-/* FILTROS PLATOS */
+
 
 const [platoSearch,setPlatoSearch] = useState("")
 const [categoria,setCategoria] = useState("")
@@ -46,7 +45,7 @@ console.log(error)
 
 }
 
-/* FILTRO LOCALES */
+
 
 const localesFiltrados = locales.filter(local=>{
 
@@ -62,7 +61,6 @@ return(
 
 })
 
-/* FILTRO PLATOS */
 
 const platosFiltrados = platos.filter(plato=>{
 
@@ -150,7 +148,6 @@ onChange={(e)=>setPlatoSearch(e.target.value)}
 <option value="PRINCIPAL">principal</option>
 <option value="POSTRE">postre</option>
 <option value="BEBIDA">bebida</option>
-<option value="OTROS">otros</option>
 </select>
 
 <input
