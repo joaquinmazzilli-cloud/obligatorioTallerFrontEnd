@@ -10,9 +10,7 @@ const [locales,setLocales] = useState([])
 const [platos,setPlatos] = useState([])
 
 useEffect(()=>{
-
 cargar()
-
 },[])
 
 async function cargar(){
@@ -39,28 +37,22 @@ return(
 <button>← Volver al Home</button>
 </Link>
 
-<h2>Locales creados</h2>
+<h2>Locales</h2>
 
 {locales.map(local=>(
 
 <div key={local.id}>
-
-<Link to={`/local/${local.id}`}>
-{local.name}
-</Link>
-
+<Link to={`/local/${local.id}`}>{local.name}</Link>
 </div>
 
 ))}
 
-<h2>Platos creados</h2>
+<h2>Platos</h2>
 
 {platos.map(plato=>(
 
 <div key={plato.id}>
-
 <h4>{plato.name}</h4>
-
 </div>
 
 ))}

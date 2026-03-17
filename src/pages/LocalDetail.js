@@ -1,6 +1,6 @@
 import { useEffect,useState } from "react"
-import { useParams } from "react-router-dom"
-import { getLocalById } from "../services/api"
+import { useParams,Link } from "react-router-dom"
+import { getLocales } from "../services/api"
 
 function LocalDetail(){
 
@@ -10,6 +10,7 @@ const [local,setLocal] = useState(null)
 const [rating,setRating] = useState(5)
 const [comment,setComment] = useState("")
 const [reviews,setReviews] = useState([])
+const [message,setMessage] = useState("")
 
 useEffect(()=>{
 
@@ -22,18 +23,38 @@ setReviews(r)
 
 async function cargarLocal(){
 
-const data = await getLocalById(id)
+const apiLocales = await getLocales()
+const misLocales = JSON.parse(localStorage.getItem("misLocales")) || []
 
-setLocal(data.item ? data.item : data)
+const todos = [...apiLocales,...misLocales]
+
+const encontrado = todos.find(l=>String(l.id)===id)
+
+setLocal(encontrado)
+
+}
+
+/* FORMATEAR FECHA */
+function formatearFecha(fechaISO){
+
+const fecha = new Date(fechaISO)
+
+return fecha.toLocaleDateString("es-UY",{
+day:"2-digit",
+month:"2-digit",
+year:"numeric"
+})
 
 }
 
 function enviarReview(){
 
+setMessage("")
+
 const user = JSON.parse(localStorage.getItem("user"))
 
 if(!user){
-alert("Tenes que iniciar sesión")
+setMessage("Tenés que iniciar sesión")
 return
 }
 
@@ -42,8 +63,9 @@ const username = user.username || user.user?.username
 const nuevaReview = {
 
 user:username,
-rating,
-comment
+rating:Number(rating),
+comment,
+date:new Date().toISOString()
 
 }
 
@@ -55,7 +77,10 @@ localStorage.setItem(`reviews_${id}`,JSON.stringify(r))
 
 setReviews(r)
 
-alert("Review guardada")
+setMessage("Review guardada ⭐")
+
+setComment("")
+setRating(5)
 
 }
 
@@ -67,15 +92,25 @@ return(
 
 <div className="container">
 
+{/* BOTON VOLVER */}
+<Link to="/">
+<button>← Volver al Home</button>
+</Link>
+
 <h1>{local.name}</h1>
 
+<p>{local.description}</p>
 <p>Ciudad: {local.city}</p>
+<p>Dirección: {local.address}</p>
+<p>Horario: {local.schedule}</p>
 <p>Tipo: {local.type}</p>
 <p>Precio: {local.priceRange}</p>
 
+{/* FORM REVIEW */}
+
 <h3>Dejar Review</h3>
 
-<select onChange={(e)=>setRating(e.target.value)}>
+<select value={rating} onChange={(e)=>setRating(e.target.value)}>
 
 <option value="1">⭐</option>
 <option value="2">⭐⭐</option>
@@ -89,6 +124,7 @@ return(
 
 <textarea
 placeholder="comentario"
+value={comment}
 onChange={(e)=>setComment(e.target.value)}
 />
 
@@ -98,15 +134,27 @@ onChange={(e)=>setComment(e.target.value)}
 Enviar Review
 </button>
 
+{/* MENSAJE LINDO */}
+
+{message && <div className="successBox">{message}</div>}
+
+{/* REVIEWS */}
+
 <h3>Reviews</h3>
 
 {reviews.map((r,i)=>(
 
 <div key={i} className="card">
 
-<p>{r.user}</p>
+<p><strong>{r.user}</strong></p>
 <p>{"⭐".repeat(r.rating)}</p>
 <p>{r.comment}</p>
+
+{r.date && (
+<p style={{fontSize:"12px"}}>
+{formatearFecha(r.date)}
+</p>
+)}
 
 </div>
 

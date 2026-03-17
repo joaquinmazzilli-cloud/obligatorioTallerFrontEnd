@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate,Link } from "react-router-dom"
 
 function CreateLocal(){
 
@@ -27,7 +27,6 @@ return
 const nuevoLocal = {
 
 id: Date.now(),
-
 name,
 city,
 address,
@@ -47,7 +46,6 @@ ratingAverage:0
 }
 
 const locales = JSON.parse(localStorage.getItem("misLocales")) || []
-
 locales.push(nuevoLocal)
 
 localStorage.setItem("misLocales",JSON.stringify(locales))
@@ -55,9 +53,7 @@ localStorage.setItem("misLocales",JSON.stringify(locales))
 setMessage("Local creado correctamente 🎉")
 
 setTimeout(()=>{
-
 navigate(`/local/${nuevoLocal.id}`)
-
 },1200)
 
 }
@@ -66,18 +62,18 @@ return(
 
 <div>
 
+<Link to="/">
+<button>← Volver al Home</button>
+</Link>
+
 <h2>Crear Local</h2>
 
 <form onSubmit={crearLocal}>
 
 <input placeholder="Nombre" onChange={e=>setName(e.target.value)} />
-
 <input placeholder="Ciudad" onChange={e=>setCity(e.target.value)} />
-
 <input placeholder="Dirección" onChange={e=>setAddress(e.target.value)} />
-
 <textarea placeholder="Descripción" onChange={e=>setDescription(e.target.value)} />
-
 <input placeholder="Horario" onChange={e=>setSchedule(e.target.value)} />
 
 <select onChange={e=>setType(e.target.value)}>
@@ -85,7 +81,6 @@ return(
 <option value="RESTAURANTE">Restaurante</option>
 <option value="CAFETERIA">Cafetería</option>
 <option value="BAR">Bar</option>
-<option value="FOOD_TRUCK">Food Truck</option>
 </select>
 
 <select onChange={e=>setPriceRange(e.target.value)}>
