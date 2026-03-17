@@ -8,6 +8,7 @@ function Home(){
 const [locales,setLocales] = useState([])
 const [platos,setPlatos] = useState([])
 
+/* filtros locales */
 
 const [search,setSearch] = useState("")
 const [tipo,setTipo] = useState("")
@@ -15,13 +16,16 @@ const [precio,setPrecio] = useState("")
 const [ciudad,setCiudad] = useState("")
 const [rating,setRating] = useState("")
 
-
+/* filtros platos */
 
 const [platoSearch,setPlatoSearch] = useState("")
 const [categoria,setCategoria] = useState("")
 const [platoCiudad,setPlatoCiudad] = useState("")
 const [platoLocal,setPlatoLocal] = useState("")
 const [fecha,setFecha] = useState("")
+
+const user = JSON.parse(localStorage.getItem("user"))
+const userId = user?.id || user?.user?.id
 
 useEffect(()=>{
 cargarDatos()
@@ -31,11 +35,14 @@ async function cargarDatos(){
 
 try{
 
-const l = await getLocales()
-const p = await getPlatos()
+const apiLocales = await getLocales()
+const apiPlatos = await getPlatos()
 
-setLocales(l)
-setPlatos(p)
+const misLocales = JSON.parse(localStorage.getItem("misLocales")) || []
+const misPlatos = JSON.parse(localStorage.getItem("misPlatos")) || []
+
+setLocales([...apiLocales,...misLocales])
+setPlatos([...apiPlatos,...misPlatos])
 
 }catch(error){
 
@@ -45,7 +52,7 @@ console.log(error)
 
 }
 
-
+/* FILTROS LOCALES */
 
 const localesFiltrados = locales.filter(local=>{
 
@@ -55,12 +62,13 @@ return(
 (tipo==="" || local.type===tipo) &&
 (precio==="" || local.priceRange===precio) &&
 (ciudad==="" || (local.city || "").toLowerCase().includes(ciudad.toLowerCase())) &&
-(rating==="" || local.ratingAverage >= rating)
+(rating==="" || (local.ratingAverage || 0) >= rating)
 
 )
 
 })
 
+/* FILTROS PLATOS */
 
 const platosFiltrados = platos.filter(plato=>{
 
@@ -82,7 +90,40 @@ return(
 
 <h1>Rutas del Sabor</h1>
 
+{user ? (
+
+<div>
+
+<button onClick={()=>window.location.href=`/user/${userId}`}>
+Mi Perfil
+</button>
+
+<button onClick={()=>{
+localStorage.removeItem("user")
+window.location.reload()
+}}>
+Logout
+</button>
+
+<br/><br/>
+
+<Link to="/crear-local">
+<button>Crear Local</button>
+</Link>
+
+<Link to="/crear-plato">
+<button>Crear Plato</button>
+</Link>
+
+</div>
+
+) : (
+
 <Link to="/login">Login</Link>
+
+)}
+
+{/* BUSCAR LOCALES */}
 
 <h2>Buscar locales</h2>
 
@@ -98,6 +139,7 @@ onChange={(e)=>setSearch(e.target.value)}
 <option value="CAFETERIA">cafeteria</option>
 <option value="BAR">bar</option>
 <option value="FOOD_TRUCK">food truck</option>
+<option value="OTROS">otros</option>
 </select>
 
 <select value={precio} onChange={(e)=>setPrecio(e.target.value)}>
@@ -130,9 +172,18 @@ onChange={(e)=>setCiudad(e.target.value)}
 
 <CardLocal local={local}/>
 
+<p>
+creado por:
+<Link to={`/user/${local.creator?.id}`}>
+{local.creator?.name}
+</Link>
+</p>
+
 </div>
 
 ))}
+
+{/* BUSCAR PLATOS */}
 
 <h2>Buscar platos</h2>
 
@@ -148,6 +199,7 @@ onChange={(e)=>setPlatoSearch(e.target.value)}
 <option value="PRINCIPAL">principal</option>
 <option value="POSTRE">postre</option>
 <option value="BEBIDA">bebida</option>
+<option value="OTROS">otros</option>
 </select>
 
 <input
@@ -177,12 +229,16 @@ onChange={(e)=>setPlatoLocal(e.target.value)}
 <h4>{plato.name}</h4>
 
 <p>categoria: {plato.category}</p>
-
 <p>local: {plato.localName}</p>
-
 <p>ciudad: {plato.city}</p>
-
 <p>fecha: {plato.createdAt}</p>
+
+<p>
+creado por:
+<Link to={`/user/${plato.creator?.id}`}>
+{plato.creator?.name}
+</Link>
+</p>
 
 </div>
 

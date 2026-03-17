@@ -89,4 +89,30 @@ background:white;
 padding:20px;
 border-radius:8px;
 box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}.errorBox{
+
+margin-top:15px;
+padding:12px;
+
+background:#ffdede;
+color:#b30000;
+
+border:1px solid #ff4d4d;
+border-radius:6px;
+
+font-weight:bold;
+
+}.successBox{
+
+margin-top:20px;
+padding:12px;
+
+background:#e6ffe6;
+border:1px solid #2ecc71;
+
+color:#207a3c;
+font-weight:bold;
+
+border-radius:6px;
+
 }

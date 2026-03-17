@@ -1,5 +1,5 @@
 import { useEffect,useState } from "react"
-import { useParams, Link } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { getLocalById } from "../services/api"
 
 function LocalDetail(){
@@ -7,56 +7,110 @@ function LocalDetail(){
 const { id } = useParams()
 
 const [local,setLocal] = useState(null)
+const [rating,setRating] = useState(5)
+const [comment,setComment] = useState("")
+const [reviews,setReviews] = useState([])
 
 useEffect(()=>{
+
 cargarLocal()
+
+const r = JSON.parse(localStorage.getItem(`reviews_${id}`)) || []
+setReviews(r)
+
 },[id])
 
 async function cargarLocal(){
 
-try{
-
 const data = await getLocalById(id)
 
-/* algunas APIs devuelven item */
-const localData = data.item ? data.item : data
-
-setLocal(localData)
-
-}catch(error){
-
-console.log(error)
+setLocal(data.item ? data.item : data)
 
 }
+
+function enviarReview(){
+
+const user = JSON.parse(localStorage.getItem("user"))
+
+if(!user){
+alert("Tenes que iniciar sesión")
+return
+}
+
+const username = user.username || user.user?.username
+
+const nuevaReview = {
+
+user:username,
+rating,
+comment
+
+}
+
+const r = JSON.parse(localStorage.getItem(`reviews_${id}`)) || []
+
+r.push(nuevaReview)
+
+localStorage.setItem(`reviews_${id}`,JSON.stringify(r))
+
+setReviews(r)
+
+alert("Review guardada")
 
 }
 
 if(!local){
-return <p>Cargando local...</p>
+return <p>Cargando...</p>
 }
 
 return(
 
 <div className="container">
 
-<h1>{local.name || "Sin nombre"}</h1>
+<h1>{local.name}</h1>
 
-<p>Ciudad: {local.city || "No disponible"}</p>
+<p>Ciudad: {local.city}</p>
+<p>Tipo: {local.type}</p>
+<p>Precio: {local.priceRange}</p>
 
-<p>Tipo: {local.type || "No disponible"}</p>
+<h3>Dejar Review</h3>
 
-<p>Precio: {local.priceRange || "No disponible"}</p>
+<select onChange={(e)=>setRating(e.target.value)}>
 
-<p>Rating: {local.ratingAverage || "Sin rating"}</p>
+<option value="1">⭐</option>
+<option value="2">⭐⭐</option>
+<option value="3">⭐⭐⭐</option>
+<option value="4">⭐⭐⭐⭐</option>
+<option value="5">⭐⭐⭐⭐⭐</option>
 
-{local.creator && (
-<p>
-Creado por: 
-<Link to={`/user/${local.creator.id}`}>
-{local.creator.name}
-</Link>
-</p>
-)}
+</select>
+
+<br/>
+
+<textarea
+placeholder="comentario"
+onChange={(e)=>setComment(e.target.value)}
+/>
+
+<br/>
+
+<button onClick={enviarReview}>
+Enviar Review
+</button>
+
+<h3>Reviews</h3>
+
+{reviews.map((r,i)=>(
+
+<div key={i} className="card">
+
+<p>{r.user}</p>
+<p>{"⭐".repeat(r.rating)}</p>
+<p>{r.comment}</p>
+
+</div>
+
+))}
 
 </div>
 

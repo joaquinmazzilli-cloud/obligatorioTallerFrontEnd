@@ -1,107 +1,105 @@
-
 import { useState } from "react"
-import { createLocal } from "../services/api"
+import { useNavigate } from "react-router-dom"
 
 function CreateLocal(){
 
+const navigate = useNavigate()
+const user = JSON.parse(localStorage.getItem("user"))
+
 const [name,setName] = useState("")
 const [city,setCity] = useState("")
+const [address,setAddress] = useState("")
+const [description,setDescription] = useState("")
 const [type,setType] = useState("")
 const [priceRange,setPriceRange] = useState("")
+const [schedule,setSchedule] = useState("")
+const [message,setMessage] = useState("")
 
-async function guardarLocal(e){
+function crearLocal(e){
 
 e.preventDefault()
 
-try{
-
-const user = JSON.parse(localStorage.getItem("user"))
-
-if(!user){
-alert("Tenes que iniciar sesión")
+if(!name || !city){
+setMessage("Completá los campos obligatorios")
 return
 }
 
-const token = user.token
+const nuevoLocal = {
 
-const local = {
+id: Date.now(),
+
 name,
 city,
+address,
+description,
 type,
-priceRange
-}
+priceRange,
+schedule,
 
-const res = await createLocal(local,token)
+creator:{
+id:user.id,
+name:user.username
+},
 
-console.log(res)
-
-alert("Local creado correctamente")
-
-setName("")
-setCity("")
-setType("")
-setPriceRange("")
-
-}catch(error){
-
-console.log(error)
-
-alert("Error al crear el local")
+reviews:[],
+ratingAverage:0
 
 }
+
+const locales = JSON.parse(localStorage.getItem("misLocales")) || []
+
+locales.push(nuevoLocal)
+
+localStorage.setItem("misLocales",JSON.stringify(locales))
+
+setMessage("Local creado correctamente 🎉")
+
+setTimeout(()=>{
+
+navigate(`/local/${nuevoLocal.id}`)
+
+},1200)
 
 }
 
 return(
 
-<div className="container">
+<div>
 
-<h1>Crear Local</h1>
+<h2>Crear Local</h2>
 
-<form onSubmit={guardarLocal}>
+<form onSubmit={crearLocal}>
 
-<input
-placeholder="Nombre del local"
-value={name}
-onChange={(e)=>setName(e.target.value)}
-required
-/>
+<input placeholder="Nombre" onChange={e=>setName(e.target.value)} />
 
-<input
-placeholder="Ciudad"
-value={city}
-onChange={(e)=>setCity(e.target.value)}
-required
-/>
+<input placeholder="Ciudad" onChange={e=>setCity(e.target.value)} />
 
-<select
-value={type}
-onChange={(e)=>setType(e.target.value)}
-required
->
+<input placeholder="Dirección" onChange={e=>setAddress(e.target.value)} />
+
+<textarea placeholder="Descripción" onChange={e=>setDescription(e.target.value)} />
+
+<input placeholder="Horario" onChange={e=>setSchedule(e.target.value)} />
+
+<select onChange={e=>setType(e.target.value)}>
 <option value="">Tipo</option>
 <option value="RESTAURANTE">Restaurante</option>
-<option value="CAFETERIA">Cafeteria</option>
+<option value="CAFETERIA">Cafetería</option>
 <option value="BAR">Bar</option>
 <option value="FOOD_TRUCK">Food Truck</option>
 </select>
 
-<select
-value={priceRange}
-onChange={(e)=>setPriceRange(e.target.value)}
-required
->
+<select onChange={e=>setPriceRange(e.target.value)}>
 <option value="">Precio</option>
-<option value="ECONOMICO">Economico</option>
+<option value="ECONOMICO">Económico</option>
 <option value="MEDIO">Medio</option>
 <option value="ALTO">Alto</option>
 </select>
 
-<button type="submit">
-Crear Local
-</button>
+<button>Crear</button>
 
 </form>
+
+{message && <div className="successBox">{message}</div>}
 
 </div>
 

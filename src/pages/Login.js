@@ -1,52 +1,68 @@
 import { useState } from "react"
-import { loginUser, registerUser } from "../services/api"
 import { useNavigate } from "react-router-dom"
 
 function Login(){
 
+    
 const navigate = useNavigate()
 
-const [user,setUser] = useState("")
-const [pass,setPass] = useState("")
+const [username,setUsername] = useState("")
+const [password,setPassword] = useState("")
+const [modoRegistro,setModoRegistro] = useState(false)
+const [error,setError] = useState("")
 
-async function handleLogin(e){
+function handleSubmit(e){
 
 e.preventDefault()
 
-try{
 
-const res = await loginUser(user,pass)
+setError("")
 
-localStorage.setItem("user",JSON.stringify(res))
 
-navigate(`/user/${res.user.id}`)
 
-}catch(error){
-
-console.log(error)
-alert("login incorrecto")
-
+if(username.trim()==="" || password.trim()===""){
+setError("Todos los campos son obligatorios")
+return
 }
 
+const usuarios = JSON.parse(localStorage.getItem("users")) || []
+
+if(modoRegistro){
+
+const existe = usuarios.find(u => u.username === username)
+
+if(existe){
+setError("Ese usuario ya existe")
+return
 }
 
-async function handleRegister(){
+const nuevoUsuario = {
+id: Date.now(),
+username: username,
+password: password
+}
 
-try{
+usuarios.push(nuevoUsuario)
 
-await registerUser(user,pass)
+localStorage.setItem("users",JSON.stringify(usuarios))
+localStorage.setItem("user",JSON.stringify(nuevoUsuario))
 
-/* login automático */
-const res = await loginUser(user,pass)
+navigate("/")
 
-localStorage.setItem("user",JSON.stringify(res))
+}else{
 
-navigate(`/user/${res.user.id}`)
+const usuario = usuarios.find(
+u => u.username === username && u.password === password
+)
 
-}catch(error){
+if(!usuario){
+setError("Usuario o contraseña incorrectos")
+return
+}
 
-console.log(error)
-alert("registro incorrecto")
+localStorage.setItem("user",JSON.stringify(usuario))
+
+navigate("/")
 
 }
 
@@ -56,33 +72,44 @@ return(
 
 <div className="container">
 
-<h1>Login</h1>
+<h2>{modoRegistro ? "Registro" : "Iniciar Sesión"}</h2>
 
-<form onSubmit={handleLogin}>
+<form onSubmit={handleSubmit}>
 
 <input
-placeholder="usuario"
-value={user}
-onChange={(e)=>setUser(e.target.value)}
+type="text"
+placeholder="Usuario"
+value={username}
+onChange={(e)=>setUsername(e.target.value)}
 />
 
 <input
 type="password"
-placeholder="password"
-value={pass}
-onChange={(e)=>setPass(e.target.value)}
+placeholder="Contraseña"
+value={password}
+onChange={(e)=>setPassword(e.target.value)}
 />
 
 <button type="submit">
-Login
+{modoRegistro ? "Registrarse" : "Entrar"}
 </button>
 
 </form>
 
+{/* MENSAJE DE ERROR */}
+
+{error !== "" && (
+
+<div className="errorBox">
+{error}
+</div>
+
+)}
+
 <br/>
 
-<button onClick={handleRegister}>
-Registrarse
+<button onClick={()=>setModoRegistro(!modoRegistro)}>
+{modoRegistro ? "Ya tengo cuenta" : "Crear cuenta"}
 </button>
 
 </div>

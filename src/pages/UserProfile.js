@@ -1,47 +1,53 @@
-
+import { useParams,Link } from "react-router-dom"
 import { useEffect,useState } from "react"
-import { useParams } from "react-router-dom"
 import { getLocales,getPlatos } from "../services/api"
 
 function UserProfile(){
 
-const { id } = useParams()
+const {id} = useParams()
 
 const [locales,setLocales] = useState([])
 const [platos,setPlatos] = useState([])
 
 useEffect(()=>{
+
 cargar()
+
 },[])
 
 async function cargar(){
 
-const l = await getLocales()
-const p = await getPlatos()
+const apiLocales = await getLocales()
+const apiPlatos = await getPlatos()
 
-const localesUsuario = l.filter(local=>local.creator?.id == id)
-const platosUsuario = p.filter(plato=>plato.creator?.id == id)
+const misLocales = JSON.parse(localStorage.getItem("misLocales")) || []
+const misPlatos = JSON.parse(localStorage.getItem("misPlatos")) || []
 
-setLocales(localesUsuario)
-setPlatos(platosUsuario)
+const todosLocales = [...apiLocales,...misLocales]
+const todosPlatos = [...apiPlatos,...misPlatos]
+
+setLocales(todosLocales.filter(l=>String(l.creator?.id)===id))
+setPlatos(todosPlatos.filter(p=>String(p.creator?.id)===id))
 
 }
 
 return(
 
-<div className="container">
+<div>
 
-<h1>Perfil de Usuario</h1>
+<Link to="/">
+<button>← Volver al Home</button>
+</Link>
 
 <h2>Locales creados</h2>
 
 {locales.map(local=>(
 
-<div className="card" key={local.id}>
+<div key={local.id}>
 
-<h3>{local.name}</h3>
-
-<p>{local.city}</p>
+<Link to={`/local/${local.id}`}>
+{local.name}
+</Link>
 
 </div>
 
@@ -51,11 +57,9 @@ return(
 
 {platos.map(plato=>(
 
-<div className="card" key={plato.id}>
+<div key={plato.id}>
 
-<h3>{plato.name}</h3>
-
-<p>{plato.category}</p>
+<h4>{plato.name}</h4>
 
 </div>
 
