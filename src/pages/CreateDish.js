@@ -77,7 +77,6 @@ navigate("/")
 return(
 
 <div>
-
 <Link to="/">
 <button>← Volver al Home</button>
 </Link>
