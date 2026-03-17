@@ -1,118 +1,203 @@
-body{
-margin:0;
-font-family: Arial, Helvetica, sans-serif;
-background:#f4f6f8;
-color:#333;
-}
-.container{
-max-width:900px;
-margin:auto;
-padding:20px;
+/* FUENTE MODERNA */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+:root{
+  --primary:#6366f1;
+  --primary-dark:#4f46e5;
+  --bg:#f4f6f8;
+  --text:#1e293b;
+  --card-bg:#ffffff;
+  --radius:12px;
 }
 
+/* RESET */
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:'Poppins', sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+}
+
+/* CONTAINER */
+
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:30px 20px;
+}
+
+/* TITULOS */
+
 h1{
-text-align:center;
-color:#2c3e50;
-margin-bottom:30px;
+  text-align:center;
+  font-size:2.5rem;
+  margin-bottom:30px;
 }
 
 h2{
-margin-top:30px;
-color:#34495e;
+  margin-top:30px;
+  margin-bottom:10px;
 }
 
-
+/* LINKS */
 
 a{
-text-decoration:none;
-color:#3498db;
-font-weight:bold;
+  text-decoration:none;
+  color:var(--primary);
+  font-weight:500;
+  position:relative;
+  transition:0.3s;
 }
 
-a:hover{
-color:#1d6fa5;
+a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-3px;
+  width:0%;
+  height:2px;
+  background:var(--primary);
+  transition:0.3s;
 }
 
+a:hover::after{
+  width:100%;
+}
 
-
+/* INPUTS */
 
 input, select, textarea{
-width:100%;
-padding:10px;
-margin-top:10px;
-margin-bottom:10px;
-border-radius:6px;
-border:1px solid #ccc;
-font-size:14px;
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  margin-bottom:12px;
+  border-radius:var(--radius);
+  border:1px solid #ddd;
+  font-size:14px;
+
+  transition:0.2s;
 }
 
+input:focus, select:focus, textarea:focus{
+  outline:none;
+  border-color:var(--primary);
+  box-shadow:0 0 0 2px rgba(99,102,241,0.2);
+}
 
-
+/* BOTONES */
 
 button{
-padding:10px 15px;
-border:none;
-border-radius:6px;
-background:#3498db;
-color:white;
-cursor:pointer;
-font-weight:bold;
-margin-top:10px;
+  padding:12px 18px;
+  border:none;
+  border-radius:var(--radius);
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  color:white;
+  cursor:pointer;
+  font-weight:500;
+  margin-top:10px;
+
+  transition:all 0.3s ease;
 }
 
 button:hover{
-background:#2980b9;
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:0 8px 20px rgba(99,102,241,0.3);
 }
 
-
+/* CARDS */
 
 .card{
-background:white;
-padding:15px;
-border-radius:8px;
-margin-bottom:15px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
+  background:var(--card-bg);
+  padding:20px;
+  border-radius:var(--radius);
+  margin-bottom:20px;
+
+  box-shadow:0 8px 25px rgba(0,0,0,0.06);
+  transition:0.3s;
 }
 
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 15px 35px rgba(0,0,0,0.1);
+}
 
+/* IMAGENES */
 
 img{
-border-radius:8px;
-margin-top:10px;
-max-width:100%;
+  border-radius:var(--radius);
+  margin-top:10px;
+  max-width:100%;
+
+  transition:0.3s;
 }
 
+img:hover{
+  transform:scale(1.03);
+}
 
+/* FORM */
 
 form{
-background:white;
-padding:20px;
-border-radius:8px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}.errorBox{
+  background:white;
+  padding:25px;
+  border-radius:var(--radius);
 
-margin-top:15px;
-padding:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  transition:0.3s;
+}
 
-background:#ffdede;
-color:#b30000;
+form:hover{
+  box-shadow:0 15px 40px rgba(0,0,0,0.12);
+}
 
-border:1px solid #ff4d4d;
-border-radius:6px;
+/* MENSAJES */
 
-font-weight:bold;
+.errorBox{
+  margin-top:15px;
+  padding:12px;
 
-}.successBox{
+  background:#ffe5e5;
+  color:#b30000;
 
-margin-top:20px;
-padding:12px;
+  border:1px solid #ff4d4d;
+  border-radius:var(--radius);
 
-background:#e6ffe6;
-border:1px solid #2ecc71;
+  font-weight:500;
 
-color:#207a3c;
-font-weight:bold;
+  animation:fadeIn 0.3s ease;
+}
 
-border-radius:6px;
+.successBox{
+  margin-top:20px;
+  padding:12px;
 
+  background:#e6ffe6;
+  border:1px solid #2ecc71;
+
+  color:#207a3c;
+  font-weight:500;
+
+  border-radius:var(--radius);
+
+  animation:fadeIn 0.3s ease;
+}
+
+/* ANIMACIONES */
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
 }
